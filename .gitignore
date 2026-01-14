@@ -1,0 +1,9 @@
+# Python temporary files
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
+
+# Datasets (Optional: Un-comment the next line if data is private)
+# data/
