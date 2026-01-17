@@ -94,9 +94,49 @@ for epoch in range(1001):
 
 print("Training Complete!")
 
+# --- 4. MANUAL TESTING (See the Brain Work) ---
+print("\n--- Testing the Model ---")
 
+# Let's create a 'New Student' who is High Risk:
+# Gender: Male (0), Dept: Engineering (0), Fees: 80000, Att: 60%, KCSE: 8
+new_student = np.array([[0, 0, 80000, 60, 8]])
 
-print("X shape:",x.shape)
-print("Y Shape:",y.shape)
+# WE MUST SCALE THE DATA (Just like we did for training!)
+# We use the same mean/std from before (roughly)
+# Fees (mean=30k, std=20k) -> (80000 - 30000)/20000 = 2.5
+# Att (mean=70, std=17) -> (60 - 70)/17 = -0.58
+# KCSE (mean=9.5, std=1.7) -> (8 - 9.5)/1.7 = -0.88
 
+# Manual normalized values based on our data generation logic:
+# Gender(0), Dept(0), Fees(2.5), Att(-0.6), KCSE(-0.9)
+processed_student = np.array([[0, 0, 2.5, -0.6, -0.9]], dtype=np.float32)
+
+# Run the Forward Pass
+dense1.forward(processed_student)
+activation1.forward(dense1.output)
+dense2.forward(activation1.output)
+loss.forward(dense2.output, np.array([0])) # Dummy target
+
+# Get the probability
+confidences = loss.output[0] # The softmax output
+prediction = np.argmax(confidences)
+
+print(f"Raw Input: Fees=80k, Attendance=60%")
+print(f"Model Prediction: {'DROPOUT' if prediction == 1 else 'GRADUATE'}")
+print(f"Confidence: {confidences[prediction]*100:.2f}%")
+
+# --- 5. SAVE THE MODEL (The Freeze) ---
+print("\nSaving the trained model...")
+
+# We save the weights and biases from both layers
+# .npz is a standard numpy file format
+outfile = 'data/model_parameters.npz'
+
+np.savez(outfile, 
+         d1_weights=dense1.weights, 
+         d1_biases=dense1.biases, 
+         d2_weights=dense2.weights, 
+         d2_biases=dense2.biases)
+
+print(f"Success! Model parameters saved to '{outfile}'")
 
