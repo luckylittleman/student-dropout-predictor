@@ -86,6 +86,9 @@ if st.sidebar.button("Predict Risk", type="primary"):
     
     # 5. Get Results
     confidence = act2.output[0] # e.g. [0.2, 0.8]
+    st.write("--- DEBUG INFO ---")
+    st.write(f"Raw Probabilities: [Safe: {confidence[0]:.4f}, Risk: {confidence[1]:.4f}]")
+    st.write(f"Model Input Array: {input_data}")
     prediction = np.argmax(confidence) # 0 = Graduate, 1 = Dropout
     
     # --- 5. DISPLAY RESULTS ---

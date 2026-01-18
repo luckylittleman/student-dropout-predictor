@@ -41,15 +41,15 @@ for i in range(SAMPLES):
     
     # RULE 1: Money Problems (High Fee Balance)
     if fee_balances[i] > 60000:
-        risk_score += 40
+        risk_score += 60
         
     # RULE 2: Low Attendance
     if attendance[i] < 70:
-        risk_score += 50
+        risk_score += 60
         
     # RULE 3: Academic Struggle (Engineering + Low KCSE)
     if depts[i] == 'Engineering' and kcse_points[i] < 9:
-        risk_score += 15
+        risk_score += 20
         
     # Add some randomness
     risk_score += np.random.randint(-10, 10)
